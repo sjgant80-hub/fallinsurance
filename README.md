@@ -51,7 +51,7 @@ Single HTML file, ~one CSS block, one `<script>`, no build step. Browser-native:
 - **`BroadcastChannel('fall-insurance')`** for bundle mesh. Event types: `policy.created`, `policy.updated`, `policy.lapsed`, `policy.claimed`, `renewal.due` (with `window: 60|30|14|7`), `commission.received`, `client.*`, `adviser.*`, `firm.*`, `sync.request`, `sync.snapshot`. Boot emits `sync.request`; any open peer replies with `sync.snapshot`. 300ms debounced on rapid writes.
 - **`BroadcastChannel('fall-signal')`** for cross-bundle estate signal (boot ping, prime 829).
 - **`window.KONOMI`** shim: `{tool, version, prime:829, tier:'sovereign', bundle:'fall-insurance', bundleMembers:[…], meshes:[…]}`.
-- **Audit chain** — Mansoor P3 extended. Each entry `{i, ts, tool, adviserId, clientId, policyId, action, reasoning, configVersion, prevHash, docHash, payload}`. SHA-256 via WebCrypto. Cap 100k FIFO.
+- **Audit chain** — P3 extended. Each entry `{i, ts, tool, adviserId, clientId, policyId, action, reasoning, configVersion, prevHash, docHash, payload}`. SHA-256 via WebCrypto. Cap 100k FIFO.
 - **PWA manifest** via inline `data:` URL.
 - **Aesthetic** — oxblood `#8b1a1a` / brass `#b8974a` / cream `#e6e1d6` / void `#0b0a0f`. Libre Baskerville serif, DM Sans body, IBM Plex Mono accents.
 
@@ -62,19 +62,19 @@ Conforms to `INSURANCE-BUNDLE-SHARED-SCHEMA.md` v1.0 (Policy / InsuranceClient /
 ### Files
 
 ```
-index.html   — the deliverable, single file
-README.md    — this file
-LICENSE      — MIT
-.nojekyll    — disables Jekyll on GitHub Pages
+index.html — the deliverable, single file
+README.md — this file
+LICENSE — MIT
+.nojekyll — disables Jekyll on GitHub Pages
 ```
 
 ### Boot sequence
 
 ```
 openDB()
-  → firms.length === 0 ? renderOnboard()
-  : load all stores → set STATE → boot mesh sync.request
-  → signal('boot') → audit('boot') → render()
+ → firms.length === 0 ? renderOnboard()
+ : load all stores → set STATE → boot mesh sync.request
+ → signal('boot') → audit('boot') → render()
 ```
 
 ### Extension points
