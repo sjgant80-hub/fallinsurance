@@ -282,22 +282,19 @@ tr:hover td{background:var(--ink)}
     'llama-3b':  { id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',   size: '~2GB',   label: '3B · balanced · default · most laptops' },
     'qwen-7b':   { id: 'Qwen2.5-7B-Instruct-q4f16_1-MLC',     size: '~5GB',   label: '7B · capable · needs decent GPU (M-series Mac / 8GB+ VRAM)' },
     'llama-8b':  { id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',   size: '~5GB',   label: '8B · common · needs decent GPU' },
-    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' },
-  };
+    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' }};
   const DEFAULT_MODEL = 'llama-3b';
 
   const T3_PROVIDERS = {
     anthropic: { label: 'Anthropic Claude', models: ['claude-sonnet-4-5','claude-opus-4-7','claude-haiku-4-5'], default: 'claude-sonnet-4-5', url: 'https://api.anthropic.com/v1/messages' },
     openai:    { label: 'OpenAI',           models: ['gpt-4o','gpt-4o-mini','o1-mini'],                          default: 'gpt-4o-mini',      url: 'https://api.openai.com/v1/chat/completions' },
-    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' },
-  };
+    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' }};
 
   // ─── State ───────────────────────────────────────────────────────
   const STATE = {
     config: loadConfig(),
     ai: { ready: false, loading: false, progress: 0, engine: null, model: null },
-    mesh: { active: false, peers: new Map(), bc: null, signal: null },
-  };
+    mesh: { active: false, peers: new Map(), bc: null, signal: null }};
 
   function loadConfig() {
     try { return JSON.parse(localStorage.getItem('fall-kit.config') || '{}'); }
@@ -364,8 +361,7 @@ tr:hover td{background:var(--ink)}
     if (tier === 'T2' && STATE.ai.ready && STATE.ai.engine) {
       const r = await STATE.ai.engine.chat.completions.create({
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMsg }],
-        max_tokens: maxTokens,
-      });
+        max_tokens: maxTokens});
       return r.choices[0].message.content;
     }
     if (tier === 'T3' && STATE.config.api_key && STATE.config.api_provider) {
@@ -382,8 +378,7 @@ tr:hover td{background:var(--ink)}
       const r = await fetch(T3_PROVIDERS.anthropic.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('Anthropic ' + r.status + ': ' + (await r.text()).slice(0, 200));
       const j = await r.json();
       return j.content[0].text;
@@ -392,8 +387,7 @@ tr:hover td{background:var(--ink)}
       const r = await fetch(T3_PROVIDERS.openai.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
-        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('OpenAI ' + r.status);
       const j = await r.json();
       return j.choices[0].message.content;
@@ -402,8 +396,7 @@ tr:hover td{background:var(--ink)}
       const r = await fetch(T3_PROVIDERS.google.url + model + ':generateContent?key=' + encodeURIComponent(key), {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } }),
-      });
+        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } })});
       if (!r.ok) throw new Error('Google ' + r.status);
       const j = await r.json();
       return j.candidates[0].content.parts[0].text;
@@ -644,8 +637,7 @@ tr:hover td{background:var(--ink)}
     openMint: openMint,  // v1.2 · launch kcc-mint with this seed prefilled as parent
     MODELS: WEBLLM_MODELS,
     PROVIDERS: T3_PROVIDERS,
-    state: STATE,
-  };
+    state: STATE};
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -735,13 +727,13 @@ const T0_RULES = [
  {q:"Conduct of Business COBS for insurance?",
  a:"Insurance distribution sits primarily under ICOBS (Insurance: Conduct of Business sourcebook), not COBS. ICOBS chapters: 2 general matters; 4 information to customers (status, scope, remuneration); 5 identifying client needs (D&N statement, suitability for advised sales); 6 product information (IPID, policy summary, additional ICOBS 6A rules for protection); 7 cancellation (consumer 14-day cooling off, 30 for pure protection); 8 claims handling — promptly, fairly, no unreasonable barriers, regular updates. Pure-protection life cover sits in COBS instead. PROD 4 sets product-oversight rules for manufacturers and distributors."},
  {q:"AR vs DA broker?",
- a:"Directly Authorised (DA) brokers are individually authorised by the FCA and carry their own permissions, capital requirements, PI cover (min £1,300,380 per claim, £1,924,560 aggregate under MIPRU 3.2.7R, indexed) and reporting (GABRIEL/RegData, CMAR). Appointed Representatives (AR) operate under a Principal firm's permissions — the Principal accepts full regulatory responsibility for the AR's regulated activities (FSMA s.39). Principal must maintain a written AR agreement, ensure fit-and-proper status, supervise activities, and meets capital and CMAR for the AR. Network examples: Cobra, Bspoke, Movo, Bravo. AR can switch to DA but typically needs ~£100k+ capital, dedicated compliance and broker management systems."},
+ a:"Directly Authorised (DA) brokers are individually authorised by the FCA and carry their own permissions, capital requirements, PI cover (min TBA per claim, TBA aggregate under MIPRU 3.2.7R, indexed) and reporting (GABRIEL/RegData, CMAR). Appointed Representatives (AR) operate under a Principal firm's permissions — the Principal accepts full regulatory responsibility for the AR's regulated activities (FSMA s.39). Principal must maintain a written AR agreement, ensure fit-and-proper status, supervise activities, and meets capital and CMAR for the AR. Network examples: Cobra, Bspoke, Movo, Bravo. AR can switch to DA but typically needs ~TBAk+ capital, dedicated compliance and broker management systems."},
  {q:"Conduct rule 4 — fair clear not misleading?",
  a:"Individual Conduct Rule 4 (SM&CR): 'You must pay due regard to the interests of customers and treat them fairly.' Combined with Principle 7 (communications must be clear, fair and not misleading) and the new Consumer Duty (PRIN 2A, in force 31-Jul-2023 for new and 31-Jul-2024 for closed products). Consumer Duty cross-cutting rules require firms to act in good faith, avoid foreseeable harm, and enable customers to pursue their financial objectives. Four outcomes: products & services, price & value, consumer understanding, consumer support. Insurance brokers must evidence fair value assessment annually for all consumer products. Breach attracts SM&CR enforcement against individuals as well as firm action."},
  {q:"Cyber insurance market?",
- a:"UK cyber market GWP ~£300m (2024 est, ABI). Typical SME standalone cover £25k–£5m limit, premiums £400–£15k depending on revenue, sector, controls. Standard insuring agreements: (1) first-party — incident response (forensics, legal, PR, notification costs), business interruption, cyber extortion (incl. ransomware ransom subject to OFAC/sanctions filter), data restoration; (2) third-party — privacy liability (GDPR fines insurable to extent permitted by law — England/Wales generally permits, contrast with insurability debates in NL/Italy), network security liability, media liability. Key exclusions: war/cyber-war (post Lloyd's LMA5564/5565/5566/5567 wordings effective Mar-2023), infrastructure exclusions, unpatched-vulnerability. Risk controls expected: MFA, EDR, backups (offline/immutable), patching SLA, incident response plan, employee training."},
+ a:"UK cyber market GWP ~TBAm (2024 est, ABI). Typical SME standalone cover TBAk–TBAm limit, premiums TBA–TBAk depending on revenue, sector, controls. Standard insuring agreements: (1) first-party — incident response (forensics, legal, PR, notification costs), business interruption, cyber extortion (incl. ransomware ransom subject to OFAC/sanctions filter), data restoration; (2) third-party — privacy liability (GDPR fines insurable to extent permitted by law — England/Wales generally permits, contrast with insurability debates in NL/Italy), network security liability, media liability. Key exclusions: war/cyber-war (post Lloyd's LMA5564/5565/5566/5567 wordings effective Mar-2023), infrastructure exclusions, unpatched-vulnerability. Risk controls expected: MFA, EDR, backups (offline/immutable), patching SLA, incident response plan, employee training."},
  {q:"PI minimum cover for brokers?",
- a:"MIPRU 3.2.7R sets minimum PI cover for insurance intermediaries: at least €1,250,000 per claim AND €1,850,000 aggregate, OR if 'sole liability is for the firm', alternative resource capital may be held under MIPRU 3.2.16R. FCA converted figures stand at £1,300,380 per claim and £1,924,560 aggregate (2023 update). The cover must include claims arising from breach of duty (MIPRU 3.2.10R), apply to all permitted activities, have an excess of no more than the higher of £5,000 or 1.5% of annual income (MIPRU 3.2.14R), and be from an EEA-authorised insurer or equivalent (MIPRU 3.2.11R). Networks may aggregate cover across their ARs but the per-firm minimum still applies. Renewal date must be tracked — uncovered period = breach of threshold conditions."},
+ a:"MIPRU 3.2.7R sets minimum PI cover for insurance intermediaries: at least €1,250,000 per claim AND €1,850,000 aggregate, OR if 'sole liability is for the firm', alternative resource capital may be held under MIPRU 3.2.16R. FCA converted figures stand at TBA per claim and TBA aggregate (2023 update). The cover must include claims arising from breach of duty (MIPRU 3.2.10R), apply to all permitted activities, have an excess of no more than the higher of TBA or 1.5% of annual income (MIPRU 3.2.14R), and be from an EEA-authorised insurer or equivalent (MIPRU 3.2.11R). Networks may aggregate cover across their ARs but the per-firm minimum still applies. Renewal date must be tracked — uncovered period = breach of threshold conditions."},
  {q:"RTI mid-term adjustment?",
  a:"Mid-Term Adjustment (MTA) — any change to a policy during the period of insurance: increase/decrease in sum insured, added/removed vehicles or locations, change in trade activity, additional insureds, change in business turnover. Process: (1) record the demands-and-needs delta (ICOBS 5.2); (2) obtain insurer agreement (or quote, if subject to underwriting); (3) calculate pro-rata or short-period premium adjustment per the policy schedule; (4) collect/refund difference (CASS 5 if money handled); (5) issue endorsement and revised schedule; (6) audit trail of authority and change. RTI (Real-Time Information) loosely used by brokers to describe live policy adjustments on broking platforms. Common pitfalls: forgetting to notify insurer (voids cover), failing to refund pro-rata correctly, not updating IPID."},
  {q:"Premium financing fee disclosure?",
@@ -749,7 +741,7 @@ const T0_RULES = [
  {q:"Schemes admin vs full broking?",
  a:"A 'scheme' (or delegated authority / binder / TOBA-DA) is an arrangement under which an underwriting authority is delegated by an insurer to a broker or MGA to bind risks within agreed parameters (occupation, sum insured, premium, retention). Schemes admin = broker operates the scheme: quote, bind, issue documents, collect premium, sometimes pay claims, all within the binder authority. Higher commission (often 25–40%) but heavier obligations: bordereaux reporting, Lloyd's Coverholder approval if at Lloyd's, audit cooperation, conduct & treatment outcome reporting, Consumer Duty fair-value assessment as co-manufacturer (PROD 4.2A). Full broking = placing each risk individually with insurer underwriting on a case-by-case basis — lower commission (typically 10–22.5%), no manufacturing responsibility, no bordereaux."},
  {q:"FOS limits for insurance?",
- a:"Financial Ombudsman Service (FOS) jurisdiction for insurance complaints: eligible complainants are consumers, micro-enterprises (<10 employees AND <€2m turnover/balance sheet), small businesses (turnover <£6.5m, <50 employees, balance sheet <£5m, post Apr-2019), charities (<£6.5m income), trustees (<£5m net assets), CICs. Award limits (from 01-Apr-2024): (i) £430,000 for complaints about acts/omissions on or after 01-Apr-2019; (ii) £195,000 for complaints about acts/omissions before that date; both indexed annually. FOS can also order interest, costs, and direct firm to take steps. Complaints must reach the firm first; firm has 8 weeks to respond; complainant has 6 months from final response to refer to FOS, 6 years from event / 3 from awareness (whichever later) under DISP 2.8."}
+ a:"Financial Ombudsman Service (FOS) jurisdiction for insurance complaints: eligible complainants are consumers, micro-enterprises (<10 employees AND <€2m turnover/balance sheet), small businesses (turnover <TBAm, <50 employees, balance sheet <TBAm, post Apr-2019), charities (<TBAm income), trustees (<TBAm net assets), CICs. Award limits (from 01-Apr-2024): (i) TBA for complaints about acts/omissions on or after 01-Apr-2019; (ii) TBA for complaints about acts/omissions before that date; both indexed annually. FOS can also order interest, costs, and direct firm to take steps. Complaints must reach the firm first; firm has 8 weeks to respond; complainant has 6 months from final response to refer to FOS, 6 years from event / 3 from awareness (whichever later) under DISP 2.8."}
 ];
 
 // ---- IDB ---------------------------------------------------------
@@ -936,7 +928,7 @@ function renderOnboard(){
  <div class="boot-screen"><div class="boot-card">
  <h1>◊ FallInsurance</h1>
  <div class="sub">sovereign UK GI broker · v${VERSION} · prime ${PRIME}</div>
- <p style="font-size:13px;color:var(--cream-dim);line-height:1.6">First-launch onboarding. Two short steps: register your firm (FCA reference, IDD compliance, PI insurer with the MIPRU 3.2.7R minimum £1.3M per claim / £1.9M aggregate), then add the first authorised adviser. Everything stays on this device.</p>
+ <p style="font-size:13px;color:var(--cream-dim);line-height:1.6">First-launch onboarding. Two short steps: register your firm (FCA reference, IDD compliance, PI insurer with the MIPRU 3.2.7R minimum TBAM per claim / TBAM aggregate), then add the first authorised adviser. Everything stays on this device.</p>
 
  <div class="boot-step" id="step-firm">
  <h3>1 · Firm</h3>
@@ -945,7 +937,7 @@ function renderOnboard(){
  <div class="row r3"><div class="field"><label>Companies House no</label><input id="f-ch"></div><div class="field"><label>VAT no</label><input id="f-vat"></div><div class="field"><label>Authorisation</label><select id="f-auth"><option value="DA">Directly Authorised</option><option value="AR">Appointed Representative</option></select></div></div>
  <div class="row r3"><div class="field"><label>Address line 1</label><input id="f-addr"></div><div class="field"><label>City</label><input id="f-city"></div><div class="field"><label>Postcode</label><input id="f-pc"></div></div>
  <div class="row r3"><div class="field"><label>PI insurer *</label><input id="f-pi" placeholder="e.g. Markel / Hiscox"></div><div class="field"><label>PI policy no</label><input id="f-pipn"></div><div class="field"><label>PI expires *</label><input type="date" id="f-piexp"></div></div>
- <div class="row r3"><div class="field"><label>PI limit per claim £ *</label><input type="number" id="f-pilim" value="1500000" min="1300380"><div class="hint">MIPRU 3.2.7R: min £1,300,380 per claim</div></div><div class="field"><label>PI aggregate £ *</label><input type="number" id="f-piagg" value="3000000" min="1924560"><div class="hint">MIPRU 3.2.7R: min £1,924,560 agg</div></div><div class="field"><label>CASS model</label><select id="f-cass"><option value="statutory">Statutory trust (CASS 5.3)</option><option value="non-statutory">Non-statutory trust (CASS 5.4)</option><option value="risk-transfer">Risk transfer only (no CM)</option></select></div></div>
+ <div class="row r3"><div class="field"><label>PI limit per claim £ *</label><input type="number" id="f-pilim" value="1500000" min="1300380"><div class="hint">MIPRU 3.2.7R: min TBA per claim</div></div><div class="field"><label>PI aggregate £ *</label><input type="number" id="f-piagg" value="3000000" min="1924560"><div class="hint">MIPRU 3.2.7R: min TBA agg</div></div><div class="field"><label>CASS model</label><select id="f-cass"><option value="statutory">Statutory trust (CASS 5.3)</option><option value="non-statutory">Non-statutory trust (CASS 5.4)</option><option value="risk-transfer">Risk transfer only (no CM)</option></select></div></div>
  <div class="row"><div class="field"><label>IDD compliance declaration *</label><select id="f-idd"><option value="">— select —</option><option value="declared">Declared — IDD Art 17–18 honest/fair/professional, ongoing compliance</option></select><div class="hint">Required to proceed. Annual review required.</div></div><div class="field"><label>Network principal (if AR)</label><input id="f-principal" placeholder="e.g. Cobra Network"></div></div>
  </div>
 
@@ -1058,17 +1050,17 @@ async function seedDemo(firm, adv){
  premium:{ gross:8400, ipt:1008, fee:0, commission:1260, net:6132 }, // IPT 12%, comm 15%
  commissionPct:15,
  sumInsured:2400000, indemnityLimit:5000000, excess:1000,
- cover:{ summary:'All risks buildings & contents, BI 24mo, terrorism, public liability £5m, employer liability £10m', exclusions:['Subsidence (heave)','War & nuclear','Cyber (LMA5400)'], endorsements:['Tenant alterations','Cash on premises £5k'] },
+ cover:{ summary:'All risks buildings & contents, BI 24mo, terrorism, public liability TBAm, employer liability TBAm', exclusions:['Subsidence (heave)','War & nuclear','Cyber (LMA5400)'], endorsements:['Tenant alterations','Cash on premises TBAk'] },
  demandsAndNeeds:'DEMO. Client trades from leased office at 12 King William St. Demands cover for buildings reinstatement, contents, business interruption (24mo to mirror lease), public & employer liability to satisfy lease covenants and FCA SM&CR for the regulated entity. Capacity for loss limited — material disruption would impair regulated permissions. Recommended commercial combined product matches all stated demands.',
  cdSummary:'IPID v1.2 issued 2025-08-01, sha256 7f3a...',
  ipid:{ delivered:true, deliveredAt: now - 320*86400000, version:'v1.2', sha256:'7f3a92c4b1e6d8f0a2c5b7e9d1f4a6c8b0e2d4f6a8c0b2e4d6f8a0c2b4e6d8f0', method:'email-pdf' },
  vulnerableCustomerFlag:false,
- midTermAdjustments:[{ts: now - 120*86400000, change:'Added warehouse unit B (sum insured +£300k)', premiumChange:420, refundOrAdditional:'additional', adviserId:adv.id}],
+ midTermAdjustments:[{ts: now - 120*86400000, change:'Added warehouse unit B (sum insured +TBAk)', premiumChange:420, refundOrAdditional:'additional', adviserId:adv.id}],
  claims:[],
  timeline:[
  {ts: now - 323*86400000, ev:'Policy inception', det:'AXA commercial combined bound'},
  {ts: now - 320*86400000, ev:'IPID issued', det:'v1.2 emailed PDF'},
- {ts: now - 120*86400000, ev:'MTA — warehouse addition', det:'Pro-rata £420 additional'},
+ {ts: now - 120*86400000, ev:'MTA — warehouse addition', det:'Pro-rata TBA additional'},
  {ts: now - 60*86400000, ev:'Mid-year client review', det:'No material changes'}
  ],
  demoFlag:true,
@@ -1589,7 +1581,7 @@ function renderFirm(){
  </div>
  <div class="card"><h3>PI &amp; CASS</h3>
  <div class="row r3"><div class="field"><label>PI insurer</label><input value="${esc(f.piInsurer)}" onchange="updateFirm('piInsurer',this.value)"></div><div class="field"><label>PI policy no</label><input value="${esc(f.piPolicyNo)}" onchange="updateFirm('piPolicyNo',this.value)"></div><div class="field"><label>PI expires</label><input type="date" value="${esc(f.piExpiresAt)}" onchange="updateFirm('piExpiresAt',this.value)"></div></div>
- <div class="row"><div class="field"><label>PI per claim £</label><input type="number" value="${f.piLimitPerClaim||0}" onchange="updateFirm('piLimitPerClaim',Number(this.value))"><div class="hint">Min £1,300,380</div></div><div class="field"><label>PI aggregate £</label><input type="number" value="${f.piAggregate||0}" onchange="updateFirm('piAggregate',Number(this.value))"><div class="hint">Min £1,924,560</div></div></div>
+ <div class="row"><div class="field"><label>PI per claim £</label><input type="number" value="${f.piLimitPerClaim||0}" onchange="updateFirm('piLimitPerClaim',Number(this.value))"><div class="hint">Min TBA</div></div><div class="field"><label>PI aggregate £</label><input type="number" value="${f.piAggregate||0}" onchange="updateFirm('piAggregate',Number(this.value))"><div class="hint">Min TBA</div></div></div>
  <div class="row"><div class="field"><label>CASS model</label><select onchange="updateFirm('cassModel',this.value)"><option value="statutory" ${f.cassModel==='statutory'?'selected':''}>Statutory trust (CASS 5.3)</option><option value="non-statutory" ${f.cassModel==='non-statutory'?'selected':''}>Non-statutory trust (CASS 5.4)</option><option value="risk-transfer" ${f.cassModel==='risk-transfer'?'selected':''}>Risk transfer only</option></select></div><div class="field"><label>IDD compliance</label><select onchange="updateFirm('iddCompliance',this.value)"><option value="declared" ${f.iddCompliance==='declared'?'selected':''}>Declared</option><option value="pending" ${f.iddCompliance==='pending'?'selected':''}>Pending</option></select></div></div>
  </div>
  </div>`;
